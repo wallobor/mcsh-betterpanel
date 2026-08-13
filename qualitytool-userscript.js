@@ -737,7 +737,8 @@
             display: flex;
             flex-direction: column;
             min-height: 200px;
-            overflow: auto;
+            overflow: hidden;
+            scrollbar-width: none;
         }
         .mcs-page-explorer .explorer-path {
             display: flex;
