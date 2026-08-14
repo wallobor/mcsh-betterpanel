@@ -729,6 +729,41 @@
         }
 
         /* ---------- Custom File Explorer (in‑page) ---------- */
+        /* ----- Fixed height file explorer (default: ~18 items) ----- */
+        // .mcs-page-explorer {
+        //     height: 540px !important;
+        //     min-height: 540px !important;
+        //     max-height: 540px !important;
+        //     resize: vertical;
+        //     overflow: auto;
+        // }
+    
+        // .mcs-page-explorer .explorer-list {
+        //     flex: 0 1 auto !important;
+        //     height: calc(100% - 110px) !important; /* subtract header + toolbar + handle */
+        //     overflow-y: auto !important;
+        //     min-height: 0 !important;
+        // }
+    
+        // /* Make the resize handle actually draggable */
+        // .mcs-page-explorer .explorer-resize-handle {
+        //     cursor: ns-resize !important;
+        //     height: 10px !important;
+        //     background: #2a2a2a !important;
+        //     border-top: 1px solid #444 !important;
+        //     user-select: none !important;
+        // }
+    
+        // .mcs-page-explorer .explorer-resize-handle:hover {
+        //     background: #3a3a3a !important;
+        // }
+    
+        // .mcs-page-explorer .explorer-resize-handle::after {
+        //     content: '⇅' !important;
+        //     color: #666 !important;
+        //     font-size: 12px !important;
+        //     letter-spacing: 0 !important;
+        // }
         .mcs-page-explorer {
             background: #0d0d0d;
             border: 1px solid #2a2a2a;
@@ -736,9 +771,15 @@
             margin: 12px 0;
             display: flex;
             flex-direction: column;
-            min-height: 200px;
+            // min-height: 200px;
             overflow: hidden;
             scrollbar-width: none;
+            
+            // height: 540px !important;
+            min-height: 850px !important;
+            // max-height: 850px !important;
+            // resize: vertical;
+            // overflow: auto;
         }
         .mcs-page-explorer .explorer-path {
             display: flex;
@@ -866,10 +907,15 @@
         }
         .mcs-page-explorer .explorer-list {
             flex: 1;
-            overflow-y: auto;
+            // overflow-y: auto;
             padding: 4px 8px;
-            min-height: 0;
+            // min-height: 0;
             user-select: none;
+            
+            // flex: 0 1 auto !important;
+            // height: calc(100% - 110px) !important; /* subtract header + toolbar + handle */
+            overflow-y: auto !important;
+            min-height: 0 !important;
         }
         .mcs-page-explorer .explorer-item {
             display: flex;
@@ -2861,6 +2907,12 @@
             // empty
         }
 
+        if ( typeof targetEl == 'undefined' ) {
+            console.warn('targetEl is undefined, retrying..');
+            injectPageExplorer(uuid);
+            return;
+        }
+
         const container = document.createElement('div');
         container.id = 'mcs-page-explorer';
         container.className = 'mcs-page-explorer';
@@ -2895,6 +2947,7 @@
 
         /* targetEl.parentNode.insertBefore(container, thirdEl.nextSibling); */
         targetEl.parentNode.appendChild(container);
+        container.style.height = '850px';
 
         const token = getBearerToken();
         if (!token) {
@@ -2931,7 +2984,7 @@
         document.addEventListener('mousemove', (e) => {
             if (!isResizing) return;
             const delta = e.clientY - startY;
-            const newHeight = Math.max(200, startHeight + delta);
+            const newHeight = Math.max(850, startHeight + delta);
             container.style.height = newHeight + 'px';
         });
 
@@ -3044,7 +3097,7 @@
         // ----- Render list (unchanged except user-select) -----
         function renderList(data) {
             if (!data || data.length === 0) {
-                listEl.innerHTML = '<div class="explorer-empty">Empty.</div>';
+                listEl.innerHTML = '<div class="explorer-empty">This directory is empty</div>';
                 return;
             }
 
