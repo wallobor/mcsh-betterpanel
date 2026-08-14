@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MCServerHost QTool
 // @namespace    http://tampermonkey.net/
-// @version      7.0
+// @version      7.1
 // @description  MCServerHost Quality Tool: Reworked element to have necessary feature. Made with assistance by DeepSeek.
 // @author       wallobor
 // @match        https://www.mcserverhost.com/*
@@ -21,14 +21,14 @@
         /* ---------- Toggle button ---------- */
         #mcs-toggle-btn {
             position: fixed;
-            bottom: 24px;
-            right: 120px;
+            bottom: 20px;
+            right: 20px;
             width: 48px;
             height: 48px;
-            background: #1AD76F;
+            background: #2b7500;
             border: none;
-            border-radius: 50%;
-            box-shadow: 0 4px 16px rgba(26,215,111,0.4);
+            border-radius: 15%;
+            box-shadow: 0 0 16px rgba(11, 99, 55, 0.4);
             cursor: pointer;
             z-index: 100000;
             font-size: 24px;
@@ -40,11 +40,11 @@
         }
         #mcs-toggle-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 24px rgba(26,215,111,0.6);
+            box-shadow: 0 0 24px rgba(26, 215, 98, 0.6);
         }
         #mcs-toggle-btn.active {
             background: #333;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+            box-shadow: 0 0 16px rgba(0,0,0,0.4);
             color: #fff;
         }
 
@@ -729,41 +729,6 @@
         }
 
         /* ---------- Custom File Explorer (in‑page) ---------- */
-        /* ----- Fixed height file explorer (default: ~18 items) ----- */
-        // .mcs-page-explorer {
-        //     height: 540px !important;
-        //     min-height: 540px !important;
-        //     max-height: 540px !important;
-        //     resize: vertical;
-        //     overflow: auto;
-        // }
-    
-        // .mcs-page-explorer .explorer-list {
-        //     flex: 0 1 auto !important;
-        //     height: calc(100% - 110px) !important; /* subtract header + toolbar + handle */
-        //     overflow-y: auto !important;
-        //     min-height: 0 !important;
-        // }
-    
-        // /* Make the resize handle actually draggable */
-        // .mcs-page-explorer .explorer-resize-handle {
-        //     cursor: ns-resize !important;
-        //     height: 10px !important;
-        //     background: #2a2a2a !important;
-        //     border-top: 1px solid #444 !important;
-        //     user-select: none !important;
-        // }
-    
-        // .mcs-page-explorer .explorer-resize-handle:hover {
-        //     background: #3a3a3a !important;
-        // }
-    
-        // .mcs-page-explorer .explorer-resize-handle::after {
-        //     content: '⇅' !important;
-        //     color: #666 !important;
-        //     font-size: 12px !important;
-        //     letter-spacing: 0 !important;
-        // }
         .mcs-page-explorer {
             background: #0d0d0d;
             border: 1px solid #2a2a2a;
@@ -771,15 +736,9 @@
             margin: 12px 0;
             display: flex;
             flex-direction: column;
-            // min-height: 200px;
             overflow: hidden;
             scrollbar-width: none;
-            
-            // height: 540px !important;
             min-height: 850px !important;
-            // max-height: 850px !important;
-            // resize: vertical;
-            // overflow: auto;
         }
         .mcs-page-explorer .explorer-path {
             display: flex;
@@ -809,14 +768,6 @@
             cursor: pointer;
         }
         .mcs-page-explorer .explorer-path .path-root:hover {
-            text-decoration: underline;
-        }
-        .mcs-page-explorer .explorer-path .path-home {
-            cursor: pointer;
-            font-size: 18px;
-            margin-right: 4px;
-        }
-        .mcs-page-explorer .explorer-path .path-home:hover {
             text-decoration: underline;
         }
         .mcs-page-explorer .explorer-path .path-counter {
@@ -868,29 +819,21 @@
             background: #1b5e20;
             border-color: #4caf50;
         }
-        .mcs-page-explorer .explorer-toolbar .btn-mkdir {
+        .mcs-page-explorer .explorer-toolbar .btn-new-file {
             border-color: #1565c0;
             color: #64b5f6;
         }
-        .mcs-page-explorer .explorer-toolbar .btn-mkdir:hover {
+        .mcs-page-explorer .explorer-toolbar .btn-new-file:hover {
             background: #0d47a1;
             border-color: #42a5f5;
         }
-        .mcs-page-explorer .explorer-toolbar .btn-delete {
-            border-color: #b71c1c;
-            color: #ef9a9a;
+        .mcs-page-explorer .explorer-toolbar .btn-mkdir {
+            border-color: #c05915;
+            color: #f6cf64;
         }
-        .mcs-page-explorer .explorer-toolbar .btn-delete:hover {
-            background: #8b0000;
-            border-color: #f44336;
-        }
-        .mcs-page-explorer .explorer-toolbar .btn-rename {
-            border-color: #e65100;
-            color: #ffb74d;
-        }
-        .mcs-page-explorer .explorer-toolbar .btn-rename:hover {
-            background: #bf360c;
-            border-color: #ff9800;
+        .mcs-page-explorer .explorer-toolbar .btn-mkdir:hover {
+            background: #a13c0d;
+            border-color: #f58442;
         }
         .mcs-page-explorer .explorer-toolbar .btn-refresh {
             border-color: #444;
@@ -907,13 +850,8 @@
         }
         .mcs-page-explorer .explorer-list {
             flex: 1;
-            // overflow-y: auto;
             padding: 4px 8px;
-            // min-height: 0;
             user-select: none;
-            
-            // flex: 0 1 auto !important;
-            // height: calc(100% - 110px) !important; /* subtract header + toolbar + handle */
             overflow-y: auto !important;
             min-height: 0 !important;
         }
@@ -1636,6 +1574,8 @@
                     removePageExplorer();
                 }
             }
+            
+            injectCustomNavButtons();
         }
 
         fetchSpinStatus();
@@ -2777,9 +2717,11 @@
     let contextMenuTarget = null;
     let contextMenuEl = null;
 
-    function showContextMenu(e, itemData) {
+    function showContextMenu(e, itemData, onAction) {
         hideContextMenu();
         contextMenuTarget = itemData;
+        // console.warn(`itemData : ${itemData}`);
+        // console.warn(`contextMenuTarget : ${contextMenuTarget}`);
 
         if (!contextMenuEl) {
             contextMenuEl = document.createElement('div');
@@ -2837,7 +2779,12 @@
             btn.onclick = (ev) => {
                 ev.stopPropagation();
                 hideContextMenu();
-                handleContextAction(item.action, contextMenuTarget);
+                // console.log(`[DEBUG] item.action ${item.action}`);
+                // console.log(`[DEBUG] contextMenuTarget ${contextMenuTarget}`);
+                // console.log(`[DEBUG] itemData ${itemData}`);
+                // handleContextAction(item.action, contextMenuTarget);
+                // handleContextAction(item.action, itemData);
+                onAction(item.action, itemData);
             };
             contextMenuEl.appendChild(btn);
         });
@@ -2858,6 +2805,7 @@
         contextMenuTarget = null;
     }
 
+
     // Remove page explorer
     function removePageExplorer() {
         const existing = document.getElementById('mcs-page-explorer');
@@ -2874,12 +2822,88 @@
         explorerCache.clear();
     }
 
+    // #########################
+    // CUSTOM NAV BUTTONS (Files, Backups, SFTP)
+    // #########################
+    let navButtonRetryTimer = null;
+    let navButtonRetryCount = 0;
+    const MAX_NAV_RETRY = 10;
+
+    function injectCustomNavButtons() {
+        // Only run on server pages
+        if (!window.location.pathname.includes('/servers/')) {
+            return;
+        }
+
+        // Target the exact container that holds the original tab buttons
+        const container = document.querySelector("#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > div");
+        if (!container) {
+            if (navButtonRetryCount < MAX_NAV_RETRY) {
+                if (navButtonRetryTimer) clearTimeout(navButtonRetryTimer);
+                const delay = Math.min(500 * Math.pow(1.5, navButtonRetryCount), 5000);
+                navButtonRetryCount++;
+                console.warn(`[NavButtons] Container not found, retry ${navButtonRetryCount}/${MAX_NAV_RETRY} in ${delay}ms`);
+                navButtonRetryTimer = setTimeout(injectCustomNavButtons, delay);
+            }
+            return;
+        }
+
+        // Reset retry count on success
+        navButtonRetryCount = 0;
+        if (navButtonRetryTimer) {
+            clearTimeout(navButtonRetryTimer);
+            navButtonRetryTimer = null;
+        }
+
+        // Avoid duplicate injection
+        if (container.querySelector('#mcs-custom-files-btn')) return;
+
+        const tabs = [
+            { label: 'Files', param: 'files' },
+            { label: 'Backups', param: 'backups' },
+            { label: 'SFTP', param: 'sftp' }
+        ];
+
+        tabs.forEach(({ label, param }) => {
+            const btn = document.createElement('button');
+            btn.id = `mcs-custom-${param}-btn`;
+            btn.className = 'flex items-center gap-2 px-3.5 py-2 rounded-md text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-white/[0.04]';
+            btn.textContent = label;
+
+            btn.addEventListener('click', () => {
+                const buttons = {
+                    files: document.querySelector("#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > div > :nth-child(1)"),
+                    backups: document.querySelector("#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > div > :nth-child(2)"),
+                    sftp: document.querySelector("#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > div > :nth-child(3)")
+                };
+                
+                if (param == 'files') {
+                    document.querySelector("#mcs-page-explorer").style.display = '';
+                    document.querySelector("#mcs-page-explorer").parentNode.lastChild.style.display = 'none';
+                } else {
+                    buttons[param].click();
+                    document.querySelector("#mcs-page-explorer").style.display = 'none';
+                }
+            });
+
+            container.appendChild(btn);
+        });
+
+        console.log('[NavButtons] Injected Files, Backups, SFTP buttons.');
+    }
+
+    let pageExplorerRetryCount = 0;
+    const MAX_RETRY_ATTEMPTS = 15;
+
     // Inject explorer into the page
-    function injectPageExplorer(uuid) {
+    async function injectPageExplorer(uuid) {
+        console.log("Injecting Page Explorer...");
+
         // Only inject if ?tab=files is present
         if (!window.location.href.includes('?tab=files')) {
             // If explorer exists but we're not on files tab, remove it
             if (document.getElementById('mcs-page-explorer')) {
+                console.log(`Removed page explorer`);
                 removePageExplorer();
             }
             return;
@@ -2887,28 +2911,38 @@
 
         // If already injected, just return (keep it)
         if (document.getElementById('mcs-page-explorer')) {
+            console.log(`Explorer already exist ${document.getElementById('mcs-page-explorer')}`);
             return;
         }
 
         const targetEl = document.querySelector('#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > :nth-child(2)');
         const thirdEl = document.querySelector('#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > :nth-child(3)');
         const managerButton = document.querySelector("#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > div > :nth-child(1)");
+        const backupsButton = document.querySelector("#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > div > :nth-child(2)");
+        const sftpButton = document.querySelector("#root > div > div.flex-grow > div > div > main > div:nth-child(3) > div > div > :nth-child(3)");
 
-        /* if (!targetEl || !thirdEl) {
-            console.log('[PageExplorer] Target elements not found, skipping injection.');
-            return;
-        } */
-        
         try{
             targetEl.style.display = 'none';
             thirdEl.style.display = 'none';
             managerButton.style.display = 'none';
+            backupsButton.style.display = 'none';
+            sftpButton.style.display = 'none';
         } catch (e){
             // empty
         }
 
-        if ( typeof targetEl == 'undefined' ) {
-            console.warn('targetEl is undefined, retrying..');
+        // console.log(typeof targetEl);
+        console.log(`targetEl is ${targetEl}`);
+        console.log(`Typeof targetEl ${typeof targetEl}`);
+
+        if (!targetEl) {
+            if (pageExplorerRetryCount >= MAX_PAGE_EXPLORER_RETRY_ATTEMPTS) {
+                console.error('targetEl is undefined, max retries reached, stopping..');
+                return;
+            }
+            console.warn(`targetEl is undefined, retrying.. [${pageExplorerRetryCount}]`);
+            await sleep(500);
+            pageExplorerRetryCount++;
             injectPageExplorer(uuid);
             return;
         }
@@ -2919,7 +2953,6 @@
 
         container.innerHTML = `
             <div class="explorer-path">
-                <span class="path-home" data-path="/" title="Home">🏠</span>
                 <span class="path-root" data-path="/">root</span>
                 <span id="mcs-page-path"></span>
                 <span class="path-counter" id="mcs-page-counter">0 items</span>
@@ -2932,20 +2965,18 @@
                 </div>
                 <div class="toolbar-right">
                     <button class="btn-upload" data-action="upload">Upload</button>
+                    <button class="btn-new-file" data-action="new-file">New File</button>
                     <button class="btn-mkdir" data-action="mkdir">New Folder</button>
-                    <button class="btn-delete" data-action="delete">Delete</button>
-                    <button class="btn-rename" data-action="rename">Rename</button>
                     <button class="btn-refresh" data-action="refresh">Refresh</button>
-                    <span class="explorer-status" id="mcs-page-status">Ready</span>
                 </div>
             </div>
             <div class="explorer-list" id="mcs-page-list">
                 <div class="explorer-loading">Loading...</div>
             </div>
+            <span class="explorer-status" id="mcs-page-status">Ready</span>
             <div class="explorer-resize-handle" id="mcs-explorer-resize-handle"></div>
         `;
 
-        /* targetEl.parentNode.insertBefore(container, thirdEl.nextSibling); */
         targetEl.parentNode.appendChild(container);
         container.style.height = '850px';
 
@@ -3008,6 +3039,122 @@
             counterEl.textContent = `${selected} / ${total} items`;
             // Also show in status (bottom)
             setStatus(`Loaded ${total} items`);
+        }
+
+        // ----- Clear all selections -----
+        function clearAllSelections() {
+            listEl.querySelectorAll('.item-checkbox').forEach(cb => {
+                cb.checked = false;
+                const item = cb.closest('.explorer-item');
+                if (item) item.classList.remove('selected');
+            });
+            selectedItems.clear();
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            }
+            updateCounter();
+        }
+        
+        // Context menu actions
+        async function handleContextAction(action, itemData) {
+            console.log(`Handle Context Action for : ${action} & ${itemData}`);
+            if (!itemData) return;
+            const { path, name } = itemData;
+            switch (action) {
+                case 'rename':
+                    if (selectedItems.size !== 1) {
+                        setStatus('⚠️ Please select exactly one item to rename', true);
+                        return;
+                    }
+                    const newName = prompt(`Rename "${name}" to:`, name);
+                    if (!newName || newName === name) return;
+                    try {
+                        const url = `${apiBase}/files/rename`;
+                        // root is currentPath, from is name, to is newName (relative to root)
+                        const payload = {
+                            root: currentPath,
+                            files: [{ from: name, to: newName }]
+                        };
+                        const resp = await fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                                'X-CSRF-Token': generateCsrfToken()
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                        selectedItems.clear();
+                        explorerCache.delete(currentPath);
+                        await loadDirectory(currentPath, true);
+                        setStatus(`✅ Renamed to: ${newName}`);
+                    } catch (err) {
+                        setStatus(`❌ Rename failed: ${err.message}`, true);
+                    }
+                    break;
+                case 'download':
+                    const url = `${apiBase}/files/contents?file=${encodeURIComponent(path)}&download=true`;
+                    window.open(url, '_blank');
+                    setStatus(`Downloading: ${path}`);
+                    break;
+                case 'archive':
+                    // Archive the selected item (or all selected?)
+                    // For single item, use context menu item.
+                    if (!confirm(`Archive "${name}"?`)) return;
+                    try {
+                        const url = `${apiBase}/files/compress`;
+                        const payload = {
+                            root: currentPath,
+                            files: [name]
+                        };
+                        const resp = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                                'X-CSRF-Token': generateCsrfToken()
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                        explorerCache.delete(currentPath);
+                        await loadDirectory(currentPath, true);
+                        setStatus(`✅ Archived: ${name}`);
+                    } catch (err) {
+                        setStatus(`❌ Archive failed: ${err.message}`, true);
+                    }
+                    break;
+                case 'delete':
+                    if (!confirm(`Delete "${name}"?`)) return;
+                    try {
+                        const url = `${apiBase}/files/delete`;
+                        const payload = {
+                            root: currentPath,
+                            files: [name]
+                        };
+                        const resp = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                                'X-CSRF-Token': generateCsrfToken()
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                        selectedItems.delete(path);
+                        explorerCache.delete(currentPath);
+                        await loadDirectory(currentPath, true);
+                        setStatus(`✅ Deleted: ${name}`);
+                    } catch (err) {
+                        setStatus(`❌ Delete failed: ${err.message}`, true);
+                    }
+                    break;
+                default:
+                    console.warn('Unknown context action:', action);
+            }
         }
 
         // ----- Cached loading -----
@@ -3087,10 +3234,8 @@
                 });
             });
             // Home and root clicks (with debounce)
-            const homeBtn = container.querySelector('.path-home');
             const rootBtn = container.querySelector('.path-root');
             const goHome = () => { if (currentPath !== '/') loadDirectory('/'); };
-            homeBtn.addEventListener('click', goHome);
             rootBtn.addEventListener('click', goHome);
         }
 
@@ -3174,13 +3319,22 @@
                 el.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     if (!checkbox.checked) {
+                        clearAllSelections();
                         checkbox.checked = true;
                         selectedItems.add(path);
                         el.classList.add('selected');
                         updateSelectAllState();
                         updateCounter();
                     }
-                    showContextMenu(e, { path, name: el.dataset.name, type });
+                    showContextMenu(e, { path, name: el.dataset.name, type }, handleContextAction);
+                    // console.log(`[DEBUG] Show Context Menu called with:`);
+                    // console.log(`e: ${e}`);
+                    // console.log(`path: ${path}`);
+                    // console.log(`el: ${el}`);
+                    // console.log(`el.dataset: ${el.dataset}`);
+                    // console.log(`el.dataset.name: ${el.dataset.name}`);
+                    // console.log(`type: ${type}`);
+                    // console.log({ path, name: el.dataset.name, type });
                 });
             });
 
@@ -3230,12 +3384,13 @@
                     const folderName = prompt('Enter new folder name:');
                     if (!folderName) return;
                     try {
-                        const url = `${apiBase}/files/create-folder`;
+                        const url = `${apiBase}/files/create-directory`;
                         const resp = await fetch(url, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'X-CSRF-Token': generateCsrfToken()
                             },
                             body: JSON.stringify({ name: folderName, path: currentPath })
                         });
@@ -3247,57 +3402,29 @@
                         setStatus(`❌ Failed to create folder: ${err.message}`, true);
                     }
                     break;
-                case 'delete':
-                    if (selectedItems.size === 0) {
-                        setStatus('⚠️ No items selected', true);
-                        return;
-                    }
-                    if (!confirm(`Delete ${selectedItems.size} item(s)?`)) return;
-                    const deletePromises = [];
-                    selectedItems.forEach(path => {
-                        const url = `${apiBase}/files/delete?file=${encodeURIComponent(path)}`;
-                        deletePromises.push(fetch(url, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } }));
-                    });
+                case 'new-file':
+                    const fileName = prompt('Enter new file name (with extension):');
+                    if (!fileName) return;
+                    // Ask for content (optional) using a textarea prompt? For simplicity, create empty file.
+                    const fileContent = prompt('Enter file content (leave empty for empty file):', '');
+                    const filePath = currentPath === '/' ? '/' + fileName : currentPath + '/' + fileName;
                     try {
-                        await Promise.all(deletePromises);
-                        selectedItems.clear();
-                        explorerCache.delete(currentPath);
-                        await loadDirectory(currentPath, true);
-                        setStatus(`✅ Deleted successfully`);
-                    } catch (err) {
-                        setStatus(`❌ Delete failed: ${err.message}`, true);
-                    }
-                    break;
-                case 'rename':
-                    if (selectedItems.size !== 1) {
-                        setStatus('⚠️ Please select exactly one item to rename', true);
-                        return;
-                    }
-                    const itemPath = [...selectedItems][0];
-                    const itemName = entries.find(e => (currentPath === '/' ? '/' + e.name : currentPath + '/' + e.name) === itemPath)?.name;
-                    if (!itemName) {
-                        setStatus('❌ Item not found', true);
-                        return;
-                    }
-                    const newName = prompt(`Rename "${itemName}" to:`, itemName);
-                    if (!newName || newName === itemName) return;
-                    try {
-                        const url = `${apiBase}/files/rename`;
+                        const url = `${apiBase}/files/write?file=${encodeURIComponent(filePath)}`;
                         const resp = await fetch(url, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'text/plain',
+                                'X-CSRF-Token': generateCsrfToken()
                             },
-                            body: JSON.stringify({ from: itemPath, to: currentPath === '/' ? '/' + newName : currentPath + '/' + newName })
+                            body: fileContent || ''
                         });
                         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                        selectedItems.clear();
                         explorerCache.delete(currentPath);
                         await loadDirectory(currentPath, true);
-                        setStatus(`✅ Renamed to: ${newName}`);
+                        setStatus(`✅ Created file: ${fileName}`);
                     } catch (err) {
-                        setStatus(`❌ Rename failed: ${err.message}`, true);
+                        setStatus(`❌ Failed to create file: ${err.message}`, true);
                     }
                     break;
                 case 'upload':
@@ -3309,17 +3436,29 @@
                     fileInput.onchange = async function() {
                         if (!this.files || this.files.length === 0) return;
                         const file = this.files[0];
-                        const formData = new FormData();
-                        formData.append('file', file);
-                        formData.append('path', currentPath);
                         try {
-                            const url = `${apiBase}/files/upload`;
-                            const resp = await fetch(url, {
+                            // Step 1: get upload token
+                            const tokenResp = await fetch(`${apiBase}/upload/token`, {
                                 method: 'POST',
-                                headers: { 'Authorization': `Bearer ${token}` },
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-Token': generateCsrfToken()
+                                },
+                                body: JSON.stringify({ directory: currentPath })
+                            });
+                            if (!tokenResp.ok) throw new Error(`Failed to get upload token: ${tokenResp.status}`);
+                            const tokenData = await tokenResp.json();
+                            const uploadUrl = tokenData.upload_url;
+
+                            // Step 2: upload the file
+                            const formData = new FormData();
+                            formData.append('files', file);
+                            const uploadResp = await fetch(uploadUrl, {
+                                method: 'POST',
                                 body: formData
                             });
-                            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                            if (!uploadResp.ok) throw new Error(`Upload failed: ${uploadResp.status}`);
                             explorerCache.delete(currentPath);
                             await loadDirectory(currentPath, true);
                             setStatus(`✅ Uploaded: ${file.name}`);
@@ -3331,67 +3470,6 @@
                     break;
                 default:
                     console.warn('Unknown action:', action);
-            }
-        }
-
-        // Context menu actions
-        async function handleContextAction(action, itemData) {
-            if (!itemData) return;
-            const { path, name } = itemData;
-            switch (action) {
-                case 'rename':
-                    if (selectedItems.size !== 1) {
-                        setStatus('⚠️ Please select exactly one item to rename', true);
-                        return;
-                    }
-                    const newName = prompt(`Rename "${name}" to:`, name);
-                    if (!newName || newName === name) return;
-                    try {
-                        const url = `${apiBase}/files/rename`;
-                        const resp = await fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ from: path, to: currentPath === '/' ? '/' + newName : currentPath + '/' + newName })
-                        });
-                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                        selectedItems.clear();
-                        explorerCache.delete(currentPath);
-                        await loadDirectory(currentPath, true);
-                        setStatus(`✅ Renamed to: ${newName}`);
-                    } catch (err) {
-                        setStatus(`❌ Rename failed: ${err.message}`, true);
-                    }
-                    break;
-                case 'download':
-                    const url = `${apiBase}/files/contents?file=${encodeURIComponent(path)}`;
-                    window.open(url, '_blank');
-                    setStatus(`Downloading: ${path}`);
-                    break;
-                case 'archive':
-                    setStatus('📦 Archive feature coming soon', true);
-                    break;
-                case 'delete':
-                    if (!confirm(`Delete "${name}"?`)) return;
-                    try {
-                        const deleteUrl = `${apiBase}/files/delete?file=${encodeURIComponent(path)}`;
-                        const resp = await fetch(deleteUrl, {
-                            method: 'DELETE',
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                        selectedItems.delete(path);
-                        explorerCache.delete(currentPath);
-                        await loadDirectory(currentPath, true);
-                        setStatus(`✅ Deleted: ${name}`);
-                    } catch (err) {
-                        setStatus(`❌ Delete failed: ${err.message}`, true);
-                    }
-                    break;
-                default:
-                    console.warn('Unknown context action:', action);
             }
         }
 
@@ -3427,6 +3505,10 @@
 
     function getBearerToken() {
         return localStorage.getItem('token');
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     // #########################
